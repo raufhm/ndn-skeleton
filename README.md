@@ -1,6 +1,6 @@
 # NDN API Service
 
-A modern Go-based API service for movie streaming platform with clean architecture, observability, and API documentation.
+A modern Go-based API service for course/video streaming platform with clean architecture, observability, and API documentation.
 
 ## Architecture Overview
 
