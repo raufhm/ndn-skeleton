@@ -1,0 +1,377 @@
+definitions:
+  handlers.AuthResponse:
+    properties:
+      token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        type: string
+    type: object
+  handlers.CreateMovieRequest:
+    properties:
+      categories:
+        example:
+        - '[''Action'''
+        - ' ''Sci-Fi'']'
+        items:
+          type: string
+        type: array
+      description:
+        example: A computer programmer discovers a mysterious world...
+        type: string
+      duration:
+        example: 136
+        type: integer
+      poster_url:
+        example: https://example.com/matrix.jpg
+        type: string
+      release_year:
+        example: 1999
+        type: integer
+      title:
+        example: The Matrix
+        type: string
+      video_url:
+        example: https://example.com/matrix.mp4
+        type: string
+    type: object
+  handlers.ErrorResponse:
+    properties:
+      error:
+        example: Invalid request parameters
+        type: string
+    type: object
+  handlers.LoginRequest:
+    properties:
+      email:
+        example: user@example.com
+        type: string
+      password:
+        example: password123
+        type: string
+    type: object
+  handlers.MovieResponse:
+    properties:
+      categories:
+        items:
+          type: string
+        type: array
+      description:
+        type: string
+      duration:
+        example: 136
+        type: integer
+      id:
+        example: 1
+        type: integer
+      poster_url:
+        type: string
+      rating:
+        example: 4.8
+        type: number
+      release_year:
+        example: 1999
+        type: integer
+      title:
+        example: The Matrix
+        type: string
+      video_url:
+        type: string
+    type: object
+  handlers.RegisterRequest:
+    properties:
+      email:
+        example: user@example.com
+        type: string
+      name:
+        example: John Doe
+        type: string
+      password:
+        example: password123
+        type: string
+    type: object
+  handlers.UpdateMovieRequest:
+    properties:
+      categories:
+        items:
+          type: string
+        type: array
+      description:
+        type: string
+      duration:
+        example: 138
+        type: integer
+      poster_url:
+        type: string
+      release_year:
+        example: 2003
+        type: integer
+      title:
+        example: The Matrix Reloaded
+        type: string
+      video_url:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /admin/movies:
+    post:
+      consumes:
+      - application/json
+      description: Create a new movie with the provided details
+      parameters:
+      - description: Movie details
+        in: body
+        name: movie
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.CreateMovieRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/handlers.MovieResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create a new movie
+      tags:
+      - movies
+  /admin/movies/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a movie by ID
+      parameters:
+      - description: Movie ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete a movie
+      tags:
+      - movies
+    put:
+      consumes:
+      - application/json
+      description: Update an existing movie's details
+      parameters:
+      - description: Movie ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Movie details to update
+        in: body
+        name: movie
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.UpdateMovieRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.MovieResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update a movie
+      tags:
+      - movies
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login with email and password
+      parameters:
+      - description: Login request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.AuthResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Login user
+      tags:
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user with email and password
+      parameters:
+      - description: Register request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.AuthResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Register a new user
+      tags:
+      - auth
+  /movies:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of all movies
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/handlers.MovieResponse'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Get all movies
+      tags:
+      - movies
+  /movies/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get detailed information about a movie
+      parameters:
+      - description: Movie ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.MovieResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Get a movie by ID
+      tags:
+      - movies
+  /movies/recently-added:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of recently added movies
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/handlers.MovieResponse'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Get recently added movies
+      tags:
+      - movies
+  /movies/top-rated:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of top rated movies
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/handlers.MovieResponse'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Get top rated movies
+      tags:
+      - movies
+swagger: "2.0"

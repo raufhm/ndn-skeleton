@@ -1,0 +1,37 @@
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile
+.dockerignore
+
+# IDE specific files
+.idea
+.vscode
+*.swp
+*.swo
+
+# Binaries and temp files
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+tmp/
+
+# Go specific
+vendor/
+
+# Environment files (except .env)
+.env.*
+!.env
+
+# Logs
+*.log
+
+# OS specific
+.DS_Store
+Thumbs.db 

@@ -1,0 +1,25 @@
+environment: "development"
+
+server:
+  port: "8080"
+
+database:
+  host: "localhost"
+  port: "5432"
+  user: "postgres"
+  password: "postgres"
+  database: "ndn"
+  sslmode: "disable"
+
+jwt:
+  secret: "${JWT_SECRET}"
+
+newrelic:
+  app_name: "NDN API"
+  license_key: "${NEW_RELIC_LICENSE_KEY}"
+  enabled: true
+  distributed_tracer_enabled: true
+
+logger:
+  level: "debug"
+  encoding: "json" 
